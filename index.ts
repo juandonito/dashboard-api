@@ -1,10 +1,16 @@
 import * as http from 'http'
 import app from './app/app'
 
-const port = 3000
+import env from './app/loaders/env'
+import db from './app/loaders/db'
+
+const PORT = env.PORT
+const DB_URI = env.DB_URI
+
+db(DB_URI)
 
 const server: http.Server = http.createServer(app)
 
-server.listen(port, () => {
-    console.log('Server running');
+server.listen(PORT, () => {
+    console.log(`Server running on port: ${PORT}`);
 })
