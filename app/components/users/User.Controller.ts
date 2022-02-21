@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { AppError, HttpCode } from '../../errors'
 import UserService from './User.Service'
 
-export const getUser = (req: Request, res: Response, next: NextFunction) => {
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(200).send({
         message: 'users found'
@@ -21,7 +21,8 @@ export const postUser = async (req: Request, res: Response, next: NextFunction )
         if(newUser !== undefined ){
     
             res.status(200).send({
-                message: 'user created'
+                message: 'user created',
+                user: newUser
             })
     
         }else{

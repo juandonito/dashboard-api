@@ -13,6 +13,15 @@ const createUser = async (user : {
 
 }
 
+const findById = async (id: string) => {
+
+    const user = await UserModel.findById(id)
+
+    return user
+
+}
+
 export default {
-    createUser
+    createUser,
+    findById
 }
