@@ -3,7 +3,7 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import { errorHandler } from './middlewares'
+import { authorizedMethodsHandler, errorHandler } from './middlewares'
 
 import { UserRouter } from './components/users'
 
@@ -16,6 +16,8 @@ app.use(morgan('tiny'))
 app.use(express.urlencoded({
     extended: true
 }));
+
+app.use(authorizedMethodsHandler)
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send('Server running')
