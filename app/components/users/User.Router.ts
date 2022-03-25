@@ -2,13 +2,16 @@ import { Router } from 'express'
 import { UserController } from '.'
 import { validatorHandler } from '../../middlewares'
 
-import { postUser } from './User.Schema'
+import { auth, postUser } from './User.Schema'
 
 const router = Router()
 
 router
     .get('/', UserController.getUser)
     .post('/', validatorHandler(postUser, 'body'), UserController.postUser)
+
+router
+    .post('/login', validatorHandler(auth, 'body'), UserController.authUser)
 
 
 export default router

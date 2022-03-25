@@ -1,11 +1,13 @@
-import UserModel from "./User.Model"
+import bcrypt from 'bcrypt'
+
+import User from "./User.Model"
 
 const createUser = async (user : {
     username: string,
     password: string
 }) => {
 
-    const newUser = new UserModel(user)
+    const newUser = new User(user)
 
     const doc = await newUser.save()
 
@@ -15,13 +17,27 @@ const createUser = async (user : {
 
 const findById = async (id: string) => {
 
-    const user = await UserModel.findById(id)
+    const user = await User.findById(id)
 
     return user
 
 }
 
+const auth = async (credentials: {
+    username: string, 
+    password: string
+}) => {
+
+    const doc = await User.findOne({ username: credentials.username })
+
+    const isMatch = await doc?.checkPassword(credentials.password)
+
+    return isMatch
+
+}
+
 export default {
     createUser,
-    findById
+    findById,
+    auth
 }

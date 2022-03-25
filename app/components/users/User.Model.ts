@@ -1,14 +1,31 @@
-import { Schema, model } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
 import bcrypt from 'bcrypt'
 
-interface User {
+interface IUser {
     username: string,
     password: string
 }
 
-const UserSchema = new Schema<User>({
-    username: { type: String, required: true },
-    password: { type: String, required: true, select: false }
+interface IUserDocument extends IUser, Document {
+    checkPassword: (password: string) => Promise<void>
+}
+
+interface IUserModel extends Model<IUserDocument> {
+
+}
+
+const UserSchema = new Schema<IUserDocument>({
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
+})
+
+UserSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+        delete returnedObject.password
+    }
 })
 
 UserSchema.pre('save', async function() {
@@ -19,6 +36,14 @@ UserSchema.pre('save', async function() {
 
 })
 
-const UserModel = model<User>('User', UserSchema)
+UserSchema.methods.checkPassword = async function(password: string) {
 
-export default UserModel
+    const isMatch = await bcrypt.compare(password, this.password)
+
+    return isMatch
+
+}
+
+const User = mongoose.model<IUserDocument, IUserModel>('User', UserSchema)
+
+export default User

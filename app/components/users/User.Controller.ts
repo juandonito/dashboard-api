@@ -39,7 +39,29 @@ export const postUser = async (req: Request, res: Response, next: NextFunction )
 
 }
 
+export const authUser = async (req: Request, res: Response, next: NextFunction ) => {
+
+    const {
+        username,
+        password
+    } = req.body
+
+    const isAuth = await UserService.auth({username, password})
+
+    if(isAuth) {
+        res.status(200).send({
+            message: 'Good job'
+        })
+    } else {
+        res.status(403).send({
+            message: 'failed to authenticate'
+        })
+    }
+
+}
+
 export default {
     getUser,
-    postUser
+    postUser,
+    authUser
 }
