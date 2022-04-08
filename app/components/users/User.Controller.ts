@@ -49,6 +49,10 @@ export const authUser = async (req: Request, res: Response, next: NextFunction )
     const isAuth = await UserService.auth({username, password})
 
     if(isAuth) {
+        res.cookie('test', 'this is a test', {
+            secure: false,
+            httpOnly: true
+        })
         res.status(200).send({
             message: 'Good job'
         })
