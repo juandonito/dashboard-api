@@ -1,4 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
+import env from '../../loaders/env'
+
 import { AppError, HttpCode } from '../../errors'
 import UserService from './User.Service'
 
@@ -46,11 +49,14 @@ export const authUser = async (req: Request, res: Response, next: NextFunction )
         password
     } = req.body
 
-    const isAuth = await UserService.auth({username, password})
+    const foundUser = await UserService.auth({username, password})
 
-    if(isAuth) {
-        res.cookie('test', 'this is a test', {
-            secure: false,
+    if(foundUser) {
+
+        const token = jwt.sign({ user: username }, env.JWT_SECRET)
+
+        res.cookie('at', token, {
+            secure: true,
             httpOnly: true
         })
         res.status(200).send({

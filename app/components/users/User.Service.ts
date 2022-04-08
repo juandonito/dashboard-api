@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt'
-
 import User from "./User.Model"
 
 const createUser = async (user : {
@@ -32,7 +30,9 @@ const auth = async (credentials: {
 
     const isMatch = await doc?.checkPassword(credentials.password)
 
-    return isMatch
+    if(isMatch) return doc
+
+    return null
 
 }
 
