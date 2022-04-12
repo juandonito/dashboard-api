@@ -1,13 +1,13 @@
 import { Router } from 'express'
 import { UserController } from '.'
-import { validatorHandler } from '../../middlewares'
+import { isProtectedHandler, validatorHandler } from '../../middlewares'
 
 import { auth, postUser } from './User.Schema'
 
 const router = Router()
 
 router
-    .get('/', UserController.getUser)
+    .get('/', isProtectedHandler, UserController.getUser)
     .post('/', validatorHandler(postUser, 'body'), UserController.postUser)
 
 router

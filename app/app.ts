@@ -3,6 +3,7 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
 import { authorizedMethodsHandler, errorHandler } from './middlewares'
 
 import { UserRouter } from './components/users'
@@ -16,6 +17,7 @@ app.use(morgan('tiny'))
 app.use(express.urlencoded({
     extended: true
 }));
+app.use(cookieParser())
 
 app.use(authorizedMethodsHandler)
 

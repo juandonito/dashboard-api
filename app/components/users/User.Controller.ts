@@ -53,10 +53,10 @@ export const authUser = async (req: Request, res: Response, next: NextFunction )
 
     if(foundUser) {
 
-        const token = jwt.sign({ user: username }, env.JWT_SECRET)
+        const token = jwt.sign({ _id: foundUser._id }, env.JWT_SECRET)
 
         res.cookie('at', token, {
-            secure: true,
+            secure: false,
             httpOnly: true
         })
         res.status(200).send({
