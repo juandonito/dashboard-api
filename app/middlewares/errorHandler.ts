@@ -1,14 +1,25 @@
 import { Request, Response, NextFunction} from 'express'
 import { AppError } from '../errors'
 
-const errorHandler = (err:AppError ,req:Request, res: Response, next: NextFunction) => {
+const errorHandler = (err:Error ,req:Request, res: Response, next: NextFunction) => {
 
-    res.status(err.httpCode)
-    res.send({
-        name: err.name,
-        description: err.description,
-        isOperational: err.isOperational
-    })
+    if(err instanceof AppError){
+        res.status(err.httpCode)
+        res.send({
+            name: err.name,
+            description: err.description,
+            isOperational: err.isOperational
+        })
+    }else if(err instanceof SyntaxError){
+        res.status(400)
+        res.send({
+            name: err.name,
+            description: err.message
+        })
+    }else{
+        res.status(500)
+        res.send()
+    }
 
 }
 

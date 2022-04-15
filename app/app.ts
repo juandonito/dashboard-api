@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import { authorizedMethodsHandler, errorHandler } from './middlewares'
 
 import { UserRouter } from './components/users'
+import { TaskRouter } from './components/tasks'
 
 const app: Application = express()
 
@@ -26,6 +27,7 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 })
 
 app.use('/user', UserRouter)
+app.use('/task', TaskRouter)
 
 app.use(errorHandler)
 
