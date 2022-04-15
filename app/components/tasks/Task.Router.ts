@@ -10,6 +10,6 @@ const router = Router()
 router.use(isProtectedHandler)
 
 router
-    .post('/', validatorHandler(postTask, 'body') , TaskController.createTask)
+    .post('/', validatorHandler(postTask, 'body') , TaskController.postTask)
 
 export default router
