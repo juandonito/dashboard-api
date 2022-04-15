@@ -26,4 +26,4 @@ JWT_SECRET=
 ### Run locally
 
 - Do not forget to install dependencies ```npm ci```
-- Run the app locally ```npm serve```
+- Run the app locally ```npm run serve```
