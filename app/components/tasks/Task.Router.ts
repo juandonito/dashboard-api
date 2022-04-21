@@ -11,5 +11,6 @@ router.use(isProtectedHandler)
 
 router
     .post('/', validatorHandler(postTask, 'body') , TaskController.postTask)
+    .get('/', TaskController.getTasks)
 
 export default router

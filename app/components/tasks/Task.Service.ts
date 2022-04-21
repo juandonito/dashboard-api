@@ -14,6 +14,15 @@ export const createTask = async ( _userId: string, task: {
 
 }
 
+export const fetchOwnTasks = async ( _userId: string ) => {
+
+    const taskList = await Task.find({ _userId })
+
+    return taskList
+
+}
+
 export default {
-    createTask
+    createTask,
+    fetchOwnTasks
 }
