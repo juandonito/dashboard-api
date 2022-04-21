@@ -22,7 +22,15 @@ export const fetchOwnTasks = async ( _userId: string ) => {
 
 }
 
+export const updateTask = async ( _userId: string, _id: string, update: { description: string, done: boolean, periode: 0|1|2|3 } ) => {
+
+    const task = await Task.findOneAndUpdate({ _userId, _id }, update, { new: true })
+
+    return task
+}
+
 export default {
     createTask,
-    fetchOwnTasks
+    fetchOwnTasks,
+    updateTask
 }

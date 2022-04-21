@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { AppError, HttpCode } from '../../errors'
 import { UserService } from '../users'
 
-import TaskService from './Task.Service'
+import TaskService, { updateTask } from './Task.Service'
 
 export const postTask = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -64,7 +64,38 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction )
 
 }
 
+export const putTask = async (req: Request, res: Response, next: NextFunction ) => {
+
+    try {
+        
+        const userToken = res.locals.user
+
+        const taskUpdate = {...req.body}
+
+        const _taskId = req.params.taskId
+
+        const user = await UserService.findById(userToken._id)
+
+        if(user){
+
+            const task = await TaskService.updateTask(user._id.toString(), _taskId, taskUpdate)
+
+            res.status(HttpCode.OK)
+            res.send({
+                message: 'Update applied',
+                data: task
+            })
+
+        }
+
+    } catch (err) {
+        next(err)
+    }
+
+}
+
 export default {
     postTask,
-    getTasks
+    getTasks,
+    putTask
 }
