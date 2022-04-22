@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { AppError, HttpCode } from '../../errors'
 import { UserService } from '../users'
 
-import TaskService, { updateTask } from './Task.Service'
+import TaskService from './Task.Service'
 
 export const postTask = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -94,8 +94,37 @@ export const putTask = async (req: Request, res: Response, next: NextFunction ) 
 
 }
 
+export const deleteTask = async (req: Request, res: Response, next: NextFunction ) => {
+
+    try {
+        
+        const userToken = res.locals.user
+
+        const _taskId = req.params.taskId
+
+        const user = await UserService.findById(userToken._id)
+
+        if(user) {
+
+            const task = await TaskService.deleteOwnTask( user._id.toString(), _taskId )
+
+            res.status(HttpCode.OK)
+            res.send({
+                message: 'Delete success',
+                data: task
+            })
+
+        }
+
+    } catch (err) {
+        next(err)
+    }
+
+}
+
 export default {
     postTask,
     getTasks,
-    putTask
+    putTask,
+    deleteTask
 }

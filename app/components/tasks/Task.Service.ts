@@ -29,8 +29,17 @@ export const updateTask = async ( _userId: string, _id: string, update: { descri
     return task
 }
 
+export const deleteOwnTask = async ( _userId: string, _id: string) => {
+
+    const task = await Task.findOneAndDelete({ _userId, _id })
+
+    return task
+
+}
+
 export default {
     createTask,
     fetchOwnTasks,
-    updateTask
+    updateTask,
+    deleteOwnTask
 }
