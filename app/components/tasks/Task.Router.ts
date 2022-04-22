@@ -13,5 +13,6 @@ router
     .post('/', validatorHandler(postTask, 'body') , TaskController.postTask)
     .get('/', TaskController.getTasks)
     .put('/:taskId', validatorHandler(putTask, 'body'), TaskController.putTask)
+    .delete('/:taskId', TaskController.deleteTask)
 
 export default router
