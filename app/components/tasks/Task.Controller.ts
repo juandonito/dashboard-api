@@ -8,17 +8,15 @@ export const postTask = async (req: Request, res: Response, next: NextFunction) 
 
     try {
 
-        const userToken = res.locals.user
+        const user = res.locals.user
 
-        const user = await UserService.findById(userToken._id)
+        if(!user) throw CommonError.HttpUnauthorized()
 
         const {
             description,
             period,
             done
         } = req.body
-
-        if (!user) throw CommonError.HttpUnauthorized()
 
         const createdTask = await TaskService.createTask(user._id.toString(), { description, period, done })
 
@@ -38,9 +36,7 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
 
     try {
 
-        const userToken = res.locals.user
-
-        const user = await UserService.findById(userToken._id)
+        const user = res.locals.user
 
         if (!user) throw CommonError.HttpUnauthorized()
 
@@ -62,15 +58,13 @@ export const putTask = async (req: Request, res: Response, next: NextFunction) =
 
     try {
 
-        const userToken = res.locals.user
+        const user = res.locals.user
+
+        if (!user) throw CommonError.HttpUnauthorized()
 
         const taskUpdate = { ...req.body }
 
         const _taskId = req.params.taskId
-
-        const user = await UserService.findById(userToken._id)
-
-        if (!user) throw CommonError.HttpUnauthorized()
 
         const task = await TaskService.updateTask(user._id.toString(), _taskId, taskUpdate)
 
@@ -92,13 +86,11 @@ export const deleteTask = async (req: Request, res: Response, next: NextFunction
 
     try {
 
-        const userToken = res.locals.user
+        const user = res.locals.user
+
+        if (!user) throw CommonError.HttpUnauthorized()
 
         const _taskId = req.params.taskId
-
-        const user = await UserService.findById(userToken._id)
-
-        if (!user) throw CommonError.HttpUserNotFound()
 
         const task = await TaskService.deleteOwnTask(user._id.toString(), _taskId)
 

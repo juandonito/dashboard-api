@@ -1,13 +1,18 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import { AppError, HttpCode } from '../errors'
+import { UserService } from '../components/users'
+import { AppError, CommonError, HttpCode } from '../errors'
 
 import env from '../loaders/env'
 
-const isProtectedHandler = (req: Request, res: Response, next: NextFunction) => {
+const isProtectedHandler = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
-        const user = <{ _id: string }>jwt.verify(req.cookies.at, env.JWT_SECRET)
+        const token = <{ _id: string }>jwt.verify(req.cookies.at, env.JWT_SECRET)
+        const user = await UserService.findById(token._id)
+
+        if(!user) throw CommonError.HttpUnauthenticated()
+
         res.locals.user = user
         next()
     } catch (err) {
